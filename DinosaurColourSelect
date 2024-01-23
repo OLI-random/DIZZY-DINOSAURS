@@ -1,0 +1,39 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class SelectMaterial : MonoBehaviour
+{
+    [SerializeField] private InputActionAsset inputs;
+    public Material[] materials;
+    int x = 0;
+    [SerializeField] private MeshRenderer ArmsRenderer;
+    Renderer rend;
+
+    private void Start()
+    {
+        rend = GetComponent<Renderer>();
+        rend.enabled = true;
+        rend.sharedMaterial = materials[x];
+	    ArmsRenderer.material = materials[x];
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (inputs.FindAction("ColourChange+").WasPressedThisFrame())
+        {
+            x = (x + 1) % materials.Length; // Increment and wrap around
+            rend.sharedMaterial = materials[x];
+            ArmsRenderer.material = materials[x];
+        }
+
+        if (inputs.FindAction("ColourChange-").WasPressedThisFrame())
+        {
+            x = (x - 1 + materials.Length) % materials.Length; // Decrement and wrap around
+            rend.sharedMaterial = materials[x];
+            ArmsRenderer.material = materials[x];
+        }
+    }
+}
